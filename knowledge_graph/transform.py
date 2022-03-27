@@ -3,8 +3,7 @@ from typing import Callable, Iterable, Tuple
 
 import gamla
 
-import primitives
-from . import common_relations, triplet, triplets_index
+from . import common_relations, triplet, triplets_index, primitives
 
 
 OneToOne = Callable[

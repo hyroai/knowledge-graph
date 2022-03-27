@@ -2,8 +2,7 @@ from typing import Callable, Dict, Iterable, Optional, Tuple
 
 import gamla
 
-import primitives
-from . import common_relations, transform, triplet, triplets_index
+from . import common_relations, transform, triplet, triplets_index, primitives
 
 
 def primitive_value_to_node(
