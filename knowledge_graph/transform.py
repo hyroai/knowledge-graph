@@ -3,7 +3,9 @@ from typing import Callable, Iterable, Tuple
 
 import gamla
 
-from . import common_relations, primitives, triplet, triplets_index
+import primitives
+from . import common_relations, triplet, triplets_index
+
 
 OneToOne = Callable[
     [triplets_index.TripletsWithIndex],
