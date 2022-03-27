@@ -1,7 +1,6 @@
 from typing import Any, Callable, FrozenSet, Iterable, List
 
 import gamla
-from nlu.text_processing import text_utils
 
 from . import common_relations, primitives, triplet, triplets_index
 
@@ -237,7 +236,7 @@ def _neighbors_for_element_and_reversed_relation_ignore_capitalization(
             primitives.kind_and_text_to_primitive(kind, gamla.capitalize(text)), graph
         ),
         _neighbors_for_element_and_reversed_relation(
-            primitives.kind_and_text_to_primitive(kind, text_utils.uncapitalize(text)),
+            primitives.kind_and_text_to_primitive(kind, text[:1].lower() + text[1:]),
             graph,
         ),
     )
