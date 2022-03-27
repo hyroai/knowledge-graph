@@ -1,7 +1,3 @@
-# Knowledge Graph API
-
-A 1 hour talk that surveys this directory and design decisions behind it: <https://drive.google.com/file/d/1v6cIZKmUw6LNsHw0RfNpaYMlCCWivHyi/view?usp=sharing>.
-
 ## When to use `querying.py` vs `querying_raw.py`
 
 Both modules provide querying abilities, but `querying.py` relies on a global store of kgs, storred by their hash value. The code retrieves the kg instance from this map ad hoc. This was built so we can have a serializable representation of a node in the kg, `Node`, which has `graph_id` and `node_id`, and not have to serialize the entire kg any time we serialize an object containing them (e.g. if we're serializing or hashing a `NounPhrase` for some reason).
