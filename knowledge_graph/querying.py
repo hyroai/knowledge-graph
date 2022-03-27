@@ -354,7 +354,8 @@ node_to_latlng = gamla.compose_left(
 
 
 get_all_local_nodes_in_graph: Callable[
-    [Iterable[storage.Node]], storage.Nodes,
+    [Iterable[storage.Node]],
+    storage.Nodes,
 ] = gamla.compose_left(
     gamla.unique,
     gamla.mapcat(

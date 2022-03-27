@@ -1,7 +1,6 @@
 from typing import Any, Callable, FrozenSet, Iterable, List
 
 import gamla
-
 from nlu.text_processing import text_utils
 
 from . import common_relations, primitives, triplet, triplets_index
@@ -91,7 +90,8 @@ get_all_trigger_primitives: Callable[
 
 
 get_all_trigger_textual_triplets: Callable[
-    [triplets_index.TripletsWithIndex], Iterable[triplet.Triplet],
+    [triplets_index.TripletsWithIndex],
+    Iterable[triplet.Triplet],
 ] = gamla.compose_left(
     triplets_with_relation(common_relations.TRIGGER),
     gamla.filter(

@@ -6,7 +6,8 @@ import gamla
 from . import common_relations, primitives, triplet, triplets_index
 
 OneToOne = Callable[
-    [triplets_index.TripletsWithIndex], triplets_index.TripletsWithIndex,
+    [triplets_index.TripletsWithIndex],
+    triplets_index.TripletsWithIndex,
 ]
 
 
