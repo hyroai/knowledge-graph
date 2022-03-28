@@ -13,6 +13,10 @@ from . import (
     triplets_index,
 )
 
+
+class _AttributeMissing(Exception):
+    pass
+
 get_nodes_by_relations: Callable[
     [Iterable[triplet.Element]], Callable[[storage.Node], storage.Nodes]
 ] = gamla.compose_left(
@@ -383,10 +387,16 @@ pointing_to_type_siblings = gamla.compose(
 
 @gamla.curry
 def get_attribute_first_value(attribute: str, node: storage.Node) -> str:
-    return gamla.head(
-        find_attr_display_text(
-            node, find_exactly_bare(attribute, storage.get_graph(node.graph_id))
-        )
+    return gamla.try_and_excepts(
+        StopIteration,  # type: ignore
+        gamla.make_raise(
+            _AttributeMissing(f"Attribute: {attribute} is missing")
+        )(),
+        gamla.head(
+            find_attr_display_text(
+                node, find_exactly_bare(attribute, storage.get_graph(node.graph_id))
+            )
+        ),
     )
 
 
