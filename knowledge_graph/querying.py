@@ -390,7 +390,7 @@ def get_attribute_first_value(attribute: str, node: storage.Node) -> str:
     return gamla.try_and_excepts(
         StopIteration,  # type: ignore
         gamla.make_raise(
-            _AttributeMissing(f"Attribute: {attribute} is missing")
+            _AttributeMissing(f"Attribute: {attribute} is missing in node id: {node.node_id}")
         )(),
         gamla.head(
             find_attr_display_text(
