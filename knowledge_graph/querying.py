@@ -14,7 +14,7 @@ from . import (
 )
 
 
-class _AttributeMissing(Exception):
+class AttributeMissing(Exception):
     pass
 
 get_nodes_by_relations: Callable[
@@ -387,17 +387,14 @@ pointing_to_type_siblings = gamla.compose(
 
 @gamla.curry
 def get_attribute_first_value(attribute: str, node: storage.Node) -> str:
-    return gamla.try_and_excepts(
-        StopIteration,  # type: ignore
-        gamla.make_raise(
-            _AttributeMissing(f"Attribute: {attribute} is missing in node id: {node.node_id}")
-        )(),
-        gamla.head(
+    try:
+        return gamla.head(
             find_attr_display_text(
                 node, find_exactly_bare(attribute, storage.get_graph(node.graph_id))
             )
-        ),
-    )
+        )
+    except StopIteration:
+        raise AttributeMissing(f"Attribute: {attribute} is missing in node id: {node.node_id}")
 
 
 get_node_size_values = gamla.compose_left(
