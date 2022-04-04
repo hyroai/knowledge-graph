@@ -67,12 +67,7 @@ def trigger_primitives_by_kind(
 def triplets_with_relation(
     relation: triplet.Element,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Triplet]]:
-    def triplets_with_relation(
-        graph: triplets_index.TripletsWithIndex,
-    ) -> Iterable[triplet.Triplet]:
-        return triplets_index.relation_index(graph)(relation)
-
-    return triplets_with_relation
+    return gamla.compose_left(triplets_index.relation_index, gamla.apply(relation))
 
 
 all_display_and_trigger_triplets = gamla.juxtcat(
@@ -135,13 +130,8 @@ def entities_with_trigger(
     f: primitives.Predicate,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Element]]:
     return gamla.compose_left(
-        triplets_index.triplets,
-        gamla.filter(
-            gamla.alljuxt(
-                triplet.relation_equals(common_relations.TRIGGER),
-                gamla.compose_left(triplet.object, f),
-            )
-        ),
+        triplets_with_relation(common_relations.TRIGGER),
+        gamla.filter(gamla.compose_left(triplet.object, f)),
         gamla.map(triplet.subject),
     )
 
@@ -150,13 +140,9 @@ def instances_of_type(
     type: triplet.Element,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Element]]:
     return gamla.compose_left(
-        triplets_index.triplets,
-        gamla.filter(
-            gamla.alljuxt(
-                triplet.relation_equals(common_relations.TYPE),
-                triplet.object_equals(type),
-            )
-        ),
+        triplets_index.object_relation_index,
+        gamla.apply(type),
+        gamla.apply(common_relations.TYPE),
         gamla.map(triplet.subject),
     )
 
