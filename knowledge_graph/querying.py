@@ -394,7 +394,9 @@ def get_attribute_first_value(attribute: str, node: storage.Node) -> str:
             )
         )
     except StopIteration:
-        raise AttributeMissing(f"Attribute: {attribute} is missing in node id: {node.node_id}")
+        raise AttributeMissing(
+            f"Attribute: {attribute} is missing in node id: {node.node_id}"
+        )
 
 
 get_node_size_values = gamla.compose_left(
