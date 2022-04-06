@@ -22,7 +22,7 @@ def _get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
     try:
         hash_value = next(k for (k, v) in _REGISTERED_GRAPHS.items() if v is graph)
     except StopIteration:
-        hash_value = gamla.compute_stable_json_hash(graph)
+        hash_value = gamla.compute_stable_json_hash(triplets_index.to_json(graph))
         register_graph(hash_value, graph)
 
     return hash_value
@@ -74,7 +74,6 @@ def run_on_kg_and_node(f):
 
 
 _deserialize = gamla.compose_left(
-    gamla.itemgetter("triplets"),
     gamla.map(
         triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
     ),

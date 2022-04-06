@@ -4,6 +4,7 @@ from typing import Callable, FrozenSet
 
 import dataclasses_json
 import gamla
+import immutables
 
 from . import common_relations, triplet
 
@@ -89,8 +90,21 @@ object_relation_index = gamla.attrgetter("object_relation_index")
 relation_index = gamla.attrgetter("relation_index")
 object_index = gamla.attrgetter("object_index")
 
-from_triplet = gamla.compose_left(gamla.wrap_frozenset, TripletsWithIndex)
-from_triplets = gamla.compose_left(frozenset, TripletsWithIndex)
+
+from_triplets = gamla.ternary(
+    gamla.is_instance(immutables.Map),
+    TripletsWithIndex,
+    gamla.compose_left(
+        gamla.map(gamla.pair_right(gamla.just(None))), immutables.Map, TripletsWithIndex
+    ),
+)
+
+
+from_triplet = gamla.compose_left(gamla.wrap_tuple, from_triplets)
+
+
+def to_json(kg: TripletsWithIndex):
+    return gamla.pipe(kg, triplets, gamla.sort_by(lambda t: hash(t[0] + t[1])))
 
 
 def retrieve(
