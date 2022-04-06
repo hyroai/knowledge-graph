@@ -14,8 +14,9 @@ from . import (
 )
 
 
-class AttributeMissing(Exception):
+class AttributeMissing(Exception):  # noqa
     pass
+
 
 get_nodes_by_relations: Callable[
     [Iterable[triplet.Element]], Callable[[storage.Node], storage.Nodes]

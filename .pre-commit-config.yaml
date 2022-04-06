@@ -24,6 +24,7 @@ repos:
     rev: 21.6b0
     hooks:
       - id: black
+        additional_dependencies: ['click==8.0.4']
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.9.2
@@ -74,16 +75,3 @@ repos:
     hooks:
       - id: prettier
         files: \.(js|jsx|md)$
-
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v7.31.0
-    hooks:
-      - id: eslint
-        entry: eslint --fix --ext js,jsx .
-        files: \.(js|jsx|md)$
-        additional_dependencies:
-          - eslint-plugin-sort-requires@latest
-          - eslint@v7.31.0
-          - eslint-plugin-react@latest
-          - eslint-plugin-react-hooks@next
-          - eslint-config-react-app
