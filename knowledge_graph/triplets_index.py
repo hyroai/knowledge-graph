@@ -100,7 +100,9 @@ from_triplets = gamla.ternary(
 )
 
 
-from_triplet = gamla.compose_left(gamla.wrap_tuple, from_triplets)
+from_triplet: Callable[[triplet], TripletsWithIndex] = gamla.compose_left(
+    gamla.wrap_tuple, from_triplets
+)
 
 
 def to_json(kg: TripletsWithIndex):
