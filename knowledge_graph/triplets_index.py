@@ -104,7 +104,12 @@ from_triplet = gamla.compose_left(gamla.wrap_tuple, from_triplets)
 
 
 def to_json(kg: TripletsWithIndex):
-    return gamla.pipe(kg, triplets, gamla.sort_by(lambda t: hash(t[0] + t[1])))
+    return gamla.pipe(
+        kg,
+        triplets,
+        gamla.sort_by(lambda t: hash(t[0] + t[1])),
+        gamla.wrap_dict("triplets"),
+    )
 
 
 def retrieve(

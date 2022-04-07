@@ -74,6 +74,7 @@ def run_on_kg_and_node(f):
 
 
 _deserialize = gamla.compose_left(
+    gamla.itemgetter("triplets"),
     gamla.map(
         triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
     ),
