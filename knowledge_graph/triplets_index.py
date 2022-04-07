@@ -1,6 +1,6 @@
 import dataclasses
 import functools
-from typing import Callable, FrozenSet
+from typing import Callable, Dict, FrozenSet
 
 import dataclasses_json
 import gamla
@@ -100,12 +100,12 @@ from_triplets = gamla.ternary(
 )
 
 
-from_triplet: Callable[[triplet], TripletsWithIndex] = gamla.compose_left(
+from_triplet: Callable[[triplet.Triplet], TripletsWithIndex] = gamla.compose_left(
     gamla.wrap_tuple, from_triplets
 )
 
 
-def to_json(kg: TripletsWithIndex):
+def to_json(kg: TripletsWithIndex) -> Dict[str, immutables.Map]:
     return gamla.pipe(
         kg,
         triplets,

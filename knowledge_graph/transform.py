@@ -30,12 +30,12 @@ def transform_triplets(
 def merge_graphs_nodes_by_id(
     graphs: Iterable[triplets_index.TripletsWithIndex],
 ) -> triplets_index.TripletsWithIndex:
-    graphs = tuple(map(triplets_index.triplets, graphs))
-    if not graphs:
+    graph_triplets = tuple(map(triplets_index.triplets, graphs))
+    if not graph_triplets:
         return triplets_index.from_triplets(())
-    max_graph = max(graphs, key=len)
+    max_graph = max(graph_triplets, key=len)
     return gamla.pipe(
-        graphs,
+        graph_triplets,
         gamla.filter(gamla.not_equals(max_graph)),
         gamla.reduce(immutables.Map.update, max_graph),
         triplets_index.from_triplets,
@@ -104,5 +104,5 @@ def remove_entities(is_bad_id: triplet.Predicate) -> OneToOne:
     return transform_triplets(gamla.remove(gamla.anymap(is_bad_id)))
 
 
-def merge_with(*graphs: Tuple[triplets_index.TripletsWithIndex, ...]) -> OneToOne:
+def merge_with(*graphs: triplets_index.TripletsWithIndex) -> OneToOne:
     return lambda graph: merge_graphs_nodes_by_id([graph, *graphs])
