@@ -43,4 +43,4 @@ TripletToTriplets = triplet.OneToOne
 
 
 KnowledgeGraph = triplets_index.TripletsWithIndex
-EMPTY_GRAPH = triplets_index.from_triplets(immutables.Map())
+EMPTY_GRAPH = triplets_index.from_triplets(())
