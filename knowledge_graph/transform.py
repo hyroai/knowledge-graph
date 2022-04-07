@@ -27,7 +27,6 @@ def transform_triplets(
     return gamla.compose_left(triplets_index.triplets, f, triplets_index.from_triplets)
 
 
-@gamla.timeit
 def merge_graphs_nodes_by_id(
     graphs: Iterable[triplets_index.TripletsWithIndex],
 ) -> triplets_index.TripletsWithIndex:
