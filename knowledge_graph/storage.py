@@ -30,6 +30,7 @@ def _get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
                 )
             ),
             gamla.side_effect(gamla.star(register_graph)),
+            gamla.head,
         )
 
 
