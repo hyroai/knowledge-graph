@@ -14,6 +14,7 @@ setuptools.setup(
     install_requires=[
         "dataclasses_json==0.5.5",
         "cloud-utils @ https://github.com/hyroai/cloud-utils/tarball/b36db35f6271f0c3afc16a0d9a586b44cb404d4e",
+        "immutables",
         "pytest",
         "phonenumbers",
     ],

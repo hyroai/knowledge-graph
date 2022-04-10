@@ -2,6 +2,7 @@ import itertools
 from typing import Callable, Iterable, Tuple
 
 import gamla
+import immutables
 
 from . import common_relations, primitives, triplet, triplets_index
 
@@ -26,9 +27,19 @@ def transform_triplets(
     return gamla.compose_left(triplets_index.triplets, f, triplets_index.from_triplets)
 
 
-merge_graphs_nodes_by_id = gamla.compose_left(
-    gamla.mapcat(triplets_index.triplets), triplets_index.from_triplets
-)
+def merge_graphs_nodes_by_id(
+    graphs: Iterable[triplets_index.TripletsWithIndex],
+) -> triplets_index.TripletsWithIndex:
+    graph_triplets = tuple(map(triplets_index.triplets, graphs))
+    if not graph_triplets:
+        return triplets_index.from_triplets(())
+    max_graph = max(graph_triplets, key=len)
+    return gamla.pipe(
+        graph_triplets,
+        gamla.filter(gamla.not_equals(max_graph)),
+        gamla.reduce(immutables.Map.update, max_graph),
+        triplets_index.from_triplets,
+    )
 
 
 mapcat_triplets: Callable[[triplet.OneToMany], OneToOne] = gamla.compose(
@@ -93,5 +104,5 @@ def remove_entities(is_bad_id: triplet.Predicate) -> OneToOne:
     return transform_triplets(gamla.remove(gamla.anymap(is_bad_id)))
 
 
-def merge_with(*graphs: Tuple[triplets_index.TripletsWithIndex, ...]) -> OneToOne:
+def merge_with(*graphs: triplets_index.TripletsWithIndex) -> OneToOne:
     return lambda graph: merge_graphs_nodes_by_id([graph, *graphs])

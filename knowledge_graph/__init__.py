@@ -9,7 +9,7 @@ from .storage import (  # isort:skip
     node_id,
 )
 
-from .triplets_index import from_triplet, from_triplets, triplets  # isort:skip
+from .triplets_index import from_triplet, from_triplets, triplets, to_json  # isort:skip
 
 from .minigraph_builders import *  # isort:skip
 from .querying import *  # isort:skip
@@ -43,4 +43,4 @@ TripletToTriplets = triplet.OneToOne
 
 
 KnowledgeGraph = triplets_index.TripletsWithIndex
-EMPTY_GRAPH = triplets_index.TripletsWithIndex(frozenset())
+EMPTY_GRAPH = triplets_index.from_triplets(())
