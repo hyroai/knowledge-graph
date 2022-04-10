@@ -20,12 +20,17 @@ def register_graph(hash: GraphHash, graph: triplets_index.TripletsWithIndex):
 
 def _get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
     try:
-        hash_value = next(k for (k, v) in _REGISTERED_GRAPHS.items() if v is graph)
+        return next(k for (k, v) in _REGISTERED_GRAPHS.items() if v is graph)
     except StopIteration:
-        hash_value = gamla.compute_stable_json_hash(triplets_index.to_json(graph))
-        register_graph(hash_value, graph)
-
-    return hash_value
+        return gamla.pipe(
+            graph,
+            gamla.pair_with(
+                gamla.compose_left(
+                    triplets_index.to_json, gamla.compute_stable_json_hash
+                )
+            ),
+            gamla.side_effect(gamla.star(register_graph)),
+        )
 
 
 def get_graph(graph_id: GraphHash) -> triplets_index.TripletsWithIndex:
