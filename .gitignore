@@ -1,3 +1,5 @@
 .idea
 build
-__pycache__/
+**/__pycache__/
+**/*.egg-info/
+**/.pytest_cache
