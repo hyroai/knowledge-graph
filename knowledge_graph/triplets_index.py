@@ -105,11 +105,16 @@ from_triplet: Callable[[triplet.Triplet], TripletsWithIndex] = gamla.compose_lef
 )
 
 
-def to_json(kg: TripletsWithIndex) -> Dict[str, immutables.Map]:
+def to_json(kg: TripletsWithIndex) -> Dict[str, tuple]:
     return gamla.pipe(
         kg,
         triplets,
-        gamla.sort_by(lambda t: hash(t[0] + t[1])),
+        gamla.map(
+            triplet.transform_object(
+                gamla.when(gamla.is_instance(gamla.frozendict), dict)
+            )
+        ),
+        sorted,
         gamla.wrap_dict("triplets"),
     )
 
