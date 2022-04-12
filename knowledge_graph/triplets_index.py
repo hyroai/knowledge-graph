@@ -109,11 +109,6 @@ def to_json(kg: TripletsWithIndex) -> Dict[str, tuple]:
     return gamla.pipe(
         kg,
         triplets,
-        gamla.map(
-            triplet.transform_object(
-                gamla.when(gamla.is_instance(gamla.frozendict), dict)
-            )
-        ),
         sorted,
         gamla.wrap_dict("triplets"),
     )
