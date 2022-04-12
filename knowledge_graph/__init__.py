@@ -7,9 +7,10 @@ from .storage import (  # isort:skip
     load_to_kg,
     make_node_universal_id,
     node_id,
+    to_json,
 )
 
-from .triplets_index import from_triplet, from_triplets, triplets, to_json  # isort:skip
+from .triplets_index import from_triplet, from_triplets, triplets  # isort:skip
 
 from .minigraph_builders import *  # isort:skip
 from .querying import *  # isort:skip

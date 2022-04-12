@@ -25,9 +25,7 @@ def _get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
         return gamla.pipe(
             graph,
             gamla.pair_with(
-                gamla.compose_left(
-                    triplets_index.to_json, gamla.compute_stable_json_hash
-                )
+                gamla.compose_left(to_json, gamla.compute_stable_json_hash)
             ),
             gamla.side_effect(gamla.star(register_graph)),
             gamla.head,
@@ -79,12 +77,16 @@ def run_on_kg_and_node(f):
     return inner
 
 
-_deserialize = gamla.compose_left(
+_from_json = gamla.compose_left(
     gamla.itemgetter("triplets"),
     gamla.map(
         triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
     ),
     triplets_index.from_triplets,
+)
+
+to_json: Callable[[triplets_index.TripletsWithIndex], Dict] = gamla.compose_left(
+    triplets_index.triplets, sorted, gamla.wrap_dict("triplets")
 )
 
 
@@ -102,7 +104,7 @@ def load_to_kg(
                     file_store.load_by_hash(
                         environment == environment_local, bucket_name
                     ),
-                    _deserialize,
+                    _from_json,
                 ),
                 exception_type=KeyError,
             )
@@ -112,4 +114,4 @@ def load_to_kg(
     )
 
 
-load_knowledge_graph_from_file = gamla.compose_left(json.load, _deserialize)
+load_knowledge_graph_from_file = gamla.compose_left(json.load, _from_json)
