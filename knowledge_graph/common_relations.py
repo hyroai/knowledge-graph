@@ -62,6 +62,7 @@ FUNCTION_MANDATORY = "function/mandatory"
 FUNCTION_OPTIONAL = "function/optional"
 AGENT_MISUNDERSTANDINGS = "agent/misunderstandings"
 FUNCTION_PARAMETERS = "function/parameters"
+QUESTION_REQUIREMENTS = "question/requirements"
 
 display_triplet = triplet.make_triplet(DISPLAY)
 trigger_triplet = triplet.make_triplet(TRIGGER)
