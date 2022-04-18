@@ -13,7 +13,7 @@ setuptools.setup(
     packages=setuptools.find_namespace_packages(),
     install_requires=[
         "dataclasses_json==0.5.5",
-        "cloud-utils @ https://github.com/hyroai/cloud-utils/tarball/b1fd9640ead5daac633ae372296a7efe2fcf2fed",
+        "cloud-utils @ https://github.com/hyroai/cloud-utils/tarball/26e27a0f013aa80e0ce83c3d4d4f99f7dbfc6b99",
         "immutables",
         "pytest",
         "phonenumbers",
