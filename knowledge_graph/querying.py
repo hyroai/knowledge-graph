@@ -18,6 +18,10 @@ class AttributeMissing(Exception):  # noqa
     pass
 
 
+class NodeTitleMissing(Exception):  # noqa
+    pass
+
+
 get_nodes_by_relations: Callable[
     [Iterable[triplet.Element]], Callable[[storage.Node], storage.Nodes]
 ] = gamla.compose_left(
@@ -152,19 +156,24 @@ find_exactly_trigger_only = (
 )
 
 
-@functools.cache
-def get_node_title(node: storage.Node) -> str:
-    return gamla.pipe(
-        node,
-        _get_node_display_value,
-        gamla.sort_by(primitives.text),
-        gamla.head,
-        primitives.to_str,
+get_node_title = functools.cache(
+    gamla.try_and_excepts(
+        StopIteration,
+        lambda _, node: gamla.just_raise(
+            NodeTitleMissing(f"Title is missing in node id: {node.node_id}")
+        ),
+        gamla.compose_left(
+            _get_node_display_value,
+            gamla.sort_by(primitives.text),
+            gamla.head,
+            primitives.to_str,
+        ),
     )
+)
 
 
 title_or_node_id = gamla.first(
-    get_node_title, storage.node_id, exception_type=StopIteration
+    get_node_title, storage.node_id, exception_type=NodeTitleMissing
 )
 
 
