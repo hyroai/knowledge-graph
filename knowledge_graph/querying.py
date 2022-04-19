@@ -85,6 +85,7 @@ def find_exactly_bare_ignore_capitalization(
     )
 
 
+@gamla.curry
 def find_by_trigger_ignore_capitalization(
     text: str, graph: triplets_index.TripletsWithIndex
 ) -> FrozenSet[Optional[storage.Node]]:
