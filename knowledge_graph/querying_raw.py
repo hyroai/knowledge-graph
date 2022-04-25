@@ -70,9 +70,19 @@ def triplets_with_relation(
     return gamla.compose_left(triplets_index.relation_index, gamla.apply(relation))
 
 
-all_display_and_trigger_triplets = gamla.juxtcat(
-    triplets_with_relation(common_relations.TRIGGER),
-    triplets_with_relation(common_relations.DISPLAY),
+def triplets_with_relations(
+    relations: Iterable[triplet.Element],
+) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Triplet]]:
+    return gamla.pipe(
+        relations,
+        gamla.map(triplets_with_relation),
+        gamla.star(gamla.juxt),
+        gamla.after(gamla.concat),
+    )
+
+
+all_display_and_trigger_triplets = triplets_with_relations(
+    (common_relations.TRIGGER, common_relations.DISPLAY)
 )
 
 
@@ -102,8 +112,7 @@ get_all_trigger_textuals = gamla.compose_left(
 triggers_and_names_from_kg: Callable[
     [triplets_index.TripletsWithIndex], frozenset
 ] = gamla.compose_left(
-    triplets_with_relation(common_relations.TRIGGER),
-    gamla.map(triplet.object),
+    get_all_trigger_primitives,
     gamla.filter(
         gamla.anyjuxt(
             primitives.kind_equals(primitives.TEXTUAL),
