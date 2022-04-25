@@ -70,15 +70,13 @@ def triplets_with_relation(
     return gamla.compose_left(triplets_index.relation_index, gamla.apply(relation))
 
 
-def triplets_with_relations(
-    relations: Iterable[triplet.Element],
-) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Triplet]]:
-    return gamla.pipe(
-        relations,
-        gamla.map(triplets_with_relation),
-        gamla.star(gamla.juxt),
-        gamla.after(gamla.concat),
-    )
+triplets_with_relations: Callable[
+    [Iterable[str]],
+    Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Triplet]],
+] = gamla.compose_left(
+    gamla.map(triplets_with_relation),
+    gamla.star(gamla.juxtcat),
+)
 
 
 all_display_and_trigger_triplets = triplets_with_relations(
