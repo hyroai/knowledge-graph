@@ -94,9 +94,6 @@ def load_to_kg(
     environment: str, environment_local: str, bucket_name: str
 ) -> Callable[[GraphHash], triplets_index.TripletsWithIndex]:
     return gamla.compose_left(
-        # TODO(eli): This is a weird design this module should either be converged with `knowledge_graph`,
-        # or have the storage abstracted away and used in serialized graph. until then:
-        # we register the graph so we won't need to recalculate the hash for a presaved graph.
         gamla.pair_right(
             gamla.first(
                 get_graph,
