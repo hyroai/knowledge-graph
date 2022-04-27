@@ -30,7 +30,7 @@ class TripletsWithIndex:
         self.subject_relation_and_object_type_index
 
     @functools.cached_property
-    def _subject_index(self) -> nested_index.HierarchicalIndex:
+    def _subject_index(self) -> nested_index.NestedIndex:
         return nested_index.build([gamla.groupby(triplet.subject)], self.triplets)
 
     @functools.cached_property
@@ -38,7 +38,7 @@ class TripletsWithIndex:
         return nested_index.to_query(self._subject_index)
 
     @functools.cached_property
-    def _relation_index(self) -> nested_index.HierarchicalIndex:
+    def _relation_index(self) -> nested_index.NestedIndex:
         return nested_index.build([gamla.groupby(triplet.relation)], self.triplets)
 
     @functools.cached_property
@@ -46,7 +46,7 @@ class TripletsWithIndex:
         return nested_index.to_query(self._relation_index)
 
     @functools.cached_property
-    def _object_index(self) -> nested_index.HierarchicalIndex:
+    def _object_index(self) -> nested_index.NestedIndex:
         return nested_index.build([gamla.groupby(triplet.object)], self.triplets)
 
     @functools.cached_property
@@ -54,7 +54,7 @@ class TripletsWithIndex:
         return nested_index.to_query(self._object_index)
 
     @functools.cached_property
-    def _subject_relation_index(self) -> nested_index.HierarchicalIndex:
+    def _subject_relation_index(self) -> nested_index.NestedIndex:
         return nested_index.build(
             map(gamla.groupby, [triplet.subject, triplet.relation]), self.triplets
         )
@@ -64,7 +64,7 @@ class TripletsWithIndex:
         return nested_index.to_query(self._subject_relation_index)
 
     @functools.cached_property
-    def _object_relation_index(self) -> nested_index.HierarchicalIndex:
+    def _object_relation_index(self) -> nested_index.NestedIndex:
         return nested_index.build(
             map(gamla.groupby, [triplet.object, triplet.relation]), self.triplets
         )
@@ -76,7 +76,7 @@ class TripletsWithIndex:
     @functools.cached_property
     def _subject_relation_and_object_type_index(
         self,
-    ) -> nested_index.HierarchicalIndex:
+    ) -> nested_index.NestedIndex:
         return nested_index.build(
             [
                 gamla.groupby(triplet.subject),
