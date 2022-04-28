@@ -10,7 +10,12 @@ from . import triplet, triplets_index
 
 GraphHash = str
 
-
+_FIELDS_TO_SERIALIZE = [
+    "triplets",
+    "_subject_index",
+    "_relation_index",
+    "_object_index",
+]
 _REGISTERED_GRAPHS: Dict[GraphHash, triplets_index.TripletsWithIndex] = {}
 
 
@@ -86,7 +91,11 @@ from_json = gamla.compose_left(
 )
 
 to_json: Callable[[triplets_index.TripletsWithIndex], Dict] = gamla.compose_left(
-    triplets_index.triplets, sorted, gamla.wrap_dict("triplets")
+    gamla.side_effect(triplets_index.TripletsWithIndex.trigger_cached_properties),
+    gamla.apply_spec(
+        {field: gamla.attrgetter(field) for field in _FIELDS_TO_SERIALIZE}
+    ),
+    gamla.transform_item("triplets", sorted),
 )
 
 
