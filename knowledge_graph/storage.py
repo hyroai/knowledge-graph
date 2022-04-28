@@ -13,8 +13,8 @@ GraphHash = str
 _FIELDS_TO_SERIALIZE = [
     "triplets",
     "_subject_index",
-    "_relation_index",
-    "_object_index",
+    # "_relation_index",
+    # "_object_index",
 ]
 _REGISTERED_GRAPHS: Dict[GraphHash, triplets_index.TripletsWithIndex] = {}
 
@@ -82,13 +82,22 @@ def run_on_kg_and_node(f):
     return inner
 
 
+def _from_triplets_and_index(kg_dict: Dict) -> triplets_index.TripletsWithIndex:
+    ...
+
+
 from_json = gamla.compose_left(
-    gamla.itemgetter("triplets"),
-    gamla.map(
-        triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
+    gamla.transform_item(
+        "triplets",
+        gamla.map(
+            triplet.transform_object(
+                gamla.when(gamla.is_instance(dict), gamla.freeze_deep)
+            )
+        ),
     ),
-    triplets_index.from_triplets,
+    _from_triplets_and_index,
 )
+
 
 to_json: Callable[[triplets_index.TripletsWithIndex], Dict] = gamla.compose_left(
     gamla.side_effect(triplets_index.TripletsWithIndex.trigger_cached_properties),
