@@ -77,7 +77,7 @@ def run_on_kg_and_node(f):
     return inner
 
 
-_from_json = gamla.compose_left(
+from_json = gamla.compose_left(
     gamla.itemgetter("triplets"),
     gamla.map(
         triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
@@ -101,7 +101,7 @@ def load_to_kg(
                     file_store.load_by_hash(
                         environment == environment_local, bucket_name
                     ),
-                    _from_json,
+                    from_json,
                 ),
                 exception_type=KeyError,
             )
@@ -111,4 +111,4 @@ def load_to_kg(
     )
 
 
-load_knowledge_graph_from_file = gamla.compose_left(json.load, _from_json)
+load_knowledge_graph_from_file = gamla.compose_left(json.load, from_json)
