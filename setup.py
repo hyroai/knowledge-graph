@@ -13,7 +13,7 @@ setuptools.setup(
     author="Hyro AI",
     author_email="contact@hyro.ai",
     url="https://github.com/hyroai/knowledge-graph/",
-    download_url="https://github.com/hyroai/knowledge-graph/archive/refs/tags/1.tar.gz",
+    download_url="https://github.com/hyroai/knowledge-graph/archive/refs/tags/v1.0.0.tar.gz",
     keywords=["tag1", "tag2"],
     classifiers=[],
     packages=setuptools.find_namespace_packages(),
