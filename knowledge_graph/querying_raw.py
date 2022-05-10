@@ -166,7 +166,7 @@ def _neighbors_for_element_and_reversed_relation(
 
 
 def _find_unique_by_relation_custom_kind_and_primitive_search(
-    relations: List[str], graph_hash
+    relations: List[str], graph_hash: str
 ):
     def _find_unique_by_relation_custom_kind_and_primitive_search(
         primitive_search: Callable[[triplet.Element], Iterable[triplet.Element]],
