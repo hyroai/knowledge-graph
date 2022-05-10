@@ -18,7 +18,7 @@ def register_graph(hash: GraphHash, graph: triplets_index.TripletsWithIndex):
     _REGISTERED_GRAPHS[hash] = graph
 
 
-def _get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
+def get_graph_hash(graph: triplets_index.TripletsWithIndex) -> GraphHash:
     try:
         return next(k for (k, v) in _REGISTERED_GRAPHS.items() if v is graph)
     except StopIteration:
@@ -55,7 +55,7 @@ node_id = gamla.attrgetter("node_id")
 def make_node_universal_id(
     graph: triplets_index.TripletsWithIndex, node: triplet.Element
 ) -> Node:
-    return Node(_get_graph_hash(graph), node)
+    return Node(get_graph_hash(graph), node)
 
 
 def run_on_kg_and_node_any_output(f):
