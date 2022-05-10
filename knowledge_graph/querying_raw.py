@@ -2,7 +2,7 @@ from typing import Any, Callable, FrozenSet, Iterable, List
 
 import gamla
 
-from . import common_relations, primitives, triplet, triplets_index, storage
+from . import common_relations, primitives, storage, triplet, triplets_index
 
 
 def has_neighbors_with_relation(relation: triplet.Element):
@@ -165,7 +165,9 @@ def _neighbors_for_element_and_reversed_relation(
     return neighbors_for_element_and_reversed_relation
 
 
-def _find_unique_by_relation_custom_kind_and_primitive_search(relations: List[str], graph_hash):
+def _find_unique_by_relation_custom_kind_and_primitive_search(
+    relations: List[str], graph_hash
+):
     def _find_unique_by_relation_custom_kind_and_primitive_search(
         primitive_search: Callable[[triplet.Element], Iterable[triplet.Element]],
         text: str,
@@ -184,7 +186,8 @@ def find_unique_by_trigger_or_display_text_custom_kind(
     kind: primitives.Kind, graph: triplets_index.TripletsWithIndex, text: str
 ) -> triplet.Element:
     return _find_unique_by_relation_custom_kind_and_primitive_search(
-        [common_relations.TRIGGER, common_relations.DISPLAY], storage.get_graph_hash(graph)
+        [common_relations.TRIGGER, common_relations.DISPLAY],
+        storage.get_graph_hash(graph),
     )(
         _neighbors_for_element_and_reversed_relation(
             primitives.kind_and_text_to_primitive(kind, text), graph
@@ -198,7 +201,8 @@ def find_unique_by_trigger_or_display_text_custom_kind_ignore_capitalization(
     kind: primitives.Kind, graph: triplets_index.TripletsWithIndex, text: str
 ) -> triplet.Element:
     return _find_unique_by_relation_custom_kind_and_primitive_search(
-        [common_relations.TRIGGER, common_relations.DISPLAY], storage.get_graph_hash(graph)
+        [common_relations.TRIGGER, common_relations.DISPLAY],
+        storage.get_graph_hash(graph),
     )(
         _neighbors_for_element_and_reversed_relation_ignore_capitalization(
             kind, graph, text
