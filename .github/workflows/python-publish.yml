@@ -23,9 +23,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
     - name: debug
-      run: 
-        - echo "$GITHUB_CONTEXT"
-        - echo ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+        echo ${{ secrets.PYPI_PASSWORD }}
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
