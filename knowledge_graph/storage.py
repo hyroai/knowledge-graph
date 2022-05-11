@@ -14,6 +14,10 @@ GraphHash = str
 _REGISTERED_GRAPHS: Dict[GraphHash, triplets_index.TripletsWithIndex] = {}
 
 
+class _EmptyGraphLoaded(Exception):
+    pass
+
+
 def register_graph(hash: GraphHash, graph: triplets_index.TripletsWithIndex):
     _REGISTERED_GRAPHS[hash] = graph
 
@@ -110,7 +114,7 @@ def load_to_kg(
         gamla.second,
         gamla.when(
             gamla.compose_left(triplets_index.triplets, gamla.empty),
-            gamla.make_raise(StopIteration),
+            gamla.make_raise(_EmptyGraphLoaded),
         ),
     )
 
