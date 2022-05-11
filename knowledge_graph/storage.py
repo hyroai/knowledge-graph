@@ -108,6 +108,10 @@ def load_to_kg(
         ),
         gamla.side_effect(gamla.star(register_graph)),
         gamla.second,
+        gamla.when(
+            gamla.compose_left(triplets_index.triplets, gamla.empty),
+            gamla.make_raise(StopIteration),
+        ),
     )
 
 
