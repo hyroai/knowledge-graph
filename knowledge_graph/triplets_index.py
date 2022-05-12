@@ -5,6 +5,7 @@ from typing import Callable, FrozenSet
 import dataclasses_json
 import gamla
 import immutables
+from gamla import nested_index
 
 from . import common_relations, triplet
 
@@ -29,59 +30,72 @@ class TripletsWithIndex:
         self.subject_relation_and_object_type_index
 
     @functools.cached_property
+    def _subject_index(self) -> nested_index.NestedIndex:
+        return nested_index.build([gamla.groupby(triplet.subject)], self.triplets)
+
+    @functools.cached_property
     def subject_index(self) -> _OneLevelIndex:
-        return gamla.pipe(
-            self, triplets, gamla.make_index(map(gamla.groupby, [triplet.subject]))
-        )
+        return nested_index.to_query(self._subject_index)
+
+    @functools.cached_property
+    def _relation_index(self) -> nested_index.NestedIndex:
+        return nested_index.build([gamla.groupby(triplet.relation)], self.triplets)
 
     @functools.cached_property
     def relation_index(self) -> _OneLevelIndex:
-        return gamla.pipe(
-            self, triplets, gamla.make_index(map(gamla.groupby, [triplet.relation]))
-        )
+        return nested_index.to_query(self._relation_index)
+
+    @functools.cached_property
+    def _object_index(self) -> nested_index.NestedIndex:
+        return nested_index.build([gamla.groupby(triplet.object)], self.triplets)
 
     @functools.cached_property
     def object_index(self) -> _OneLevelIndex:
-        return gamla.pipe(
-            self, triplets, gamla.make_index(map(gamla.groupby, [triplet.object]))
+        return nested_index.to_query(self._object_index)
+
+    @functools.cached_property
+    def _subject_relation_index(self) -> nested_index.NestedIndex:
+        return nested_index.build(
+            map(gamla.groupby, [triplet.subject, triplet.relation]), self.triplets
         )
 
     @functools.cached_property
     def subject_relation_index(self) -> _TwoLevelIndex:
-        return gamla.pipe(
-            self,
-            triplets,
-            gamla.make_index(map(gamla.groupby, [triplet.subject, triplet.relation])),
+        return nested_index.to_query(self._subject_relation_index)
+
+    @functools.cached_property
+    def _object_relation_index(self) -> nested_index.NestedIndex:
+        return nested_index.build(
+            map(gamla.groupby, [triplet.object, triplet.relation]), self.triplets
         )
 
     @functools.cached_property
     def object_relation_index(self) -> _TwoLevelIndex:
-        return gamla.pipe(
-            self,
-            triplets,
-            gamla.make_index(map(gamla.groupby, [triplet.object, triplet.relation])),
+        return nested_index.to_query(self._object_relation_index)
+
+    @functools.cached_property
+    def _subject_relation_and_object_type_index(
+        self,
+    ) -> nested_index.NestedIndex:
+        return nested_index.build(
+            [
+                gamla.groupby(triplet.subject),
+                gamla.groupby(triplet.relation),
+                gamla.groupby_many(
+                    gamla.compose_left(
+                        triplet.object,
+                        self.subject_relation_index,
+                        gamla.apply(common_relations.TYPE),
+                        gamla.map(triplet.object),
+                    )
+                ),
+            ],
+            self.triplets,
         )
 
     @functools.cached_property
     def subject_relation_and_object_type_index(self):
-        return gamla.pipe(
-            self,
-            triplets,
-            gamla.make_index(
-                [
-                    gamla.groupby(triplet.subject),
-                    gamla.groupby(triplet.relation),
-                    gamla.groupby_many(
-                        gamla.compose_left(
-                            triplet.object,
-                            self.subject_relation_index,
-                            gamla.apply(common_relations.TYPE),
-                            gamla.map(triplet.object),
-                        )
-                    ),
-                ]
-            ),
-        )
+        return nested_index.to_query(self._subject_relation_and_object_type_index)
 
 
 triplets = gamla.attrgetter("triplets")
