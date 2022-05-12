@@ -114,7 +114,8 @@ def load_to_kg(
         gamla.second,
         gamla.when(
             gamla.compose_left(triplets_index.triplets, gamla.empty),
-            gamla.make_raise(_EmptyGraphLoaded),
+            # TODO(Noah) should be make_raise once we no longer cache empty graphs
+            gamla.log(_EmptyGraphLoaded),
         ),
     )
 
