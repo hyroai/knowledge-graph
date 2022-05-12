@@ -14,8 +14,9 @@ GraphHash = str
 _REGISTERED_GRAPHS: Dict[GraphHash, triplets_index.TripletsWithIndex] = {}
 
 
-class _EmptyGraphLoaded(Exception):
-    pass
+# TODO(Noah): should be make_raise once we no longer cache empty graphs
+# class _EmptyGraphLoaded(Exception):
+#     pass
 
 
 def register_graph(hash: GraphHash, graph: triplets_index.TripletsWithIndex):
