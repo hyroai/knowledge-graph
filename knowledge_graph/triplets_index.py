@@ -4,7 +4,7 @@ from typing import Callable, FrozenSet
 
 import dataclasses_json
 import gamla
-import immutables
+import pyrsistent
 
 from . import common_relations, triplet
 
@@ -92,10 +92,10 @@ object_index = gamla.attrgetter("object_index")
 
 
 from_triplets = gamla.ternary(
-    gamla.is_instance(immutables.Map),
+    gamla.is_instance(pyrsistent.PSet),
     TripletsWithIndex,
     gamla.compose_left(
-        gamla.map(gamla.pair_right(gamla.just(None))), immutables.Map, TripletsWithIndex
+        lambda x: pyrsistent.pset(x, pre_size=100), TripletsWithIndex
     ),
 )
 

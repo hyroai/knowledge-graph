@@ -1,3 +1,4 @@
+import random
 import timeit
 
 import gamla  # noqa
@@ -20,13 +21,33 @@ def test_merge_graphs_nodes_by_id():
             common_relations.type_triplet(ORANGE, FRUIT),
         ]
     )
+
+
+def test_merge_graphs_nodes_by_id_performance():
+    kg_a = triplets_index.from_triplets(_random_triplets(0, 40000, 300, 20000))
+    kg_b = triplets_index.from_triplets(_random_triplets(1, 40000, 300, 20000))
+    print(len(kg_a.triplets))
     # Make sure merge implementation is better than just concatenating the triplets.
-    assert timeit.timeit(
+    merge_by_id_time = timeit.timeit(
         "transform.merge_graphs_nodes_by_id",
-        setup="graphs = [kg1, kg2]",
-        globals=globals() | locals(),
-    ) < timeit.timeit(
-        "lambda graphs: gamla.pipe(graphs, gamla.mapcat(triplets_index.triplets), triplets_index.from_triplets)",
-        setup="graphs = [kg1, kg2]",
-        globals=globals() | locals(),
+        setup="graphs = [kg_a, kg_b]",
+        globals=locals() | globals(),
     )
+    simple_concat_time = timeit.timeit(
+        "lambda graphs: gamla.pipe(graphs, gamla.mapcat(triplets_index.triplets), triplets_index.from_triplets)",
+        setup="graphs = [kg_a, kg_b]",
+        globals=locals() | globals(),
+    )
+    assert merge_by_id_time < simple_concat_time
+
+
+def _random_triplets(seed, n_instances_p, n_types_p, n_edges):
+    r = random.Random(seed)
+    return [
+        (
+            common_relations.type_triplet(
+                r.choice(range(n_instances_p)), r.choice(range(n_types_p))
+            )
+        )
+        for _ in range(n_edges)
+    ]

@@ -2,7 +2,7 @@ import itertools
 from typing import Callable, Iterable, Tuple
 
 import gamla
-import immutables
+import pyrsistent
 
 from . import common_relations, primitives, triplet, triplets_index
 
@@ -30,14 +30,16 @@ def transform_triplets(
 def merge_graphs_nodes_by_id(
     graphs: Iterable[triplets_index.TripletsWithIndex],
 ) -> triplets_index.TripletsWithIndex:
-    graph_triplets = tuple(map(triplets_index.triplets, graphs))
-    if not graph_triplets:
+    len_sorted_graph_triplets = gamla.pipe(graphs,gamla.map(triplets_index.triplets),gamla.sort_by_reversed(len),tuple)
+    if not len_sorted_graph_triplets:
         return triplets_index.from_triplets(())
-    max_graph = max(graph_triplets, key=len)
+
     return gamla.pipe(
-        graph_triplets,
-        gamla.filter(gamla.not_equals(max_graph)),
-        gamla.reduce(immutables.Map.update, max_graph),
+        len_sorted_graph_triplets,
+        gamla.reduce(
+            pyrsistent.PSet.union,
+            pyrsistent.pset(pre_size=sum(map(len, len_sorted_graph_triplets))),
+        ),
         triplets_index.from_triplets,
     )
 
