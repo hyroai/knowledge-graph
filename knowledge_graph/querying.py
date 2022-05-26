@@ -160,7 +160,9 @@ get_node_title = functools.cache(
     gamla.try_and_excepts(
         StopIteration,
         lambda _, node: gamla.just_raise(
-            NodeTitleMissing(f"Title is missing in node id: {node.node_id}")
+            NodeTitleMissing(
+                f"Title is missing in node id: {node.node_id}, graph id: {node.graph_id}"
+            )
         ),
         gamla.compose_left(
             _get_node_display_value,
