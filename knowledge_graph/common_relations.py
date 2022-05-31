@@ -61,6 +61,8 @@ FUNCTION_OPTIONAL = "function/optional"
 AGENT_MISUNDERSTANDINGS = "agent/misunderstandings"
 FUNCTION_PARAMETERS = "function/parameters"
 QUESTION_REQUIREMENTS = "question/requirements"
+IMPLEMENTATION_MODULE = "implementation/module"
+IMPLEMENTATION_NAME = "implementation/name"
 
 display_triplet = triplet.make_triplet(DISPLAY)
 trigger_triplet = triplet.make_triplet(TRIGGER)
