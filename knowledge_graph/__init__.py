@@ -40,7 +40,10 @@ from .triplet import (  # isort:skip
 )
 
 
-TripletToTriplets = triplet.OneToOne
+TripletToTriplet = triplet.OneToOne
+TripletToTriplets = triplet.OneToMany
+PrimitiveToPrimitive = primitives.OneToOne
+PrimitiveToPrimitives = primitives.OneToMany
 
 
 KnowledgeGraph = triplets_index.TripletsWithIndex

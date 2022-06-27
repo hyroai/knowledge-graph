@@ -9,7 +9,6 @@ import phonenumbers
 URL = "url"
 DATE = "date"
 PHONE = "phone"
-DURATION = "duration"
 IDENTIFIER = "identifier"
 LOCATION = "location"
 NAME = "name"
@@ -77,7 +76,7 @@ def parse_unit_size(text: str) -> str:
         return text
 
 
-def format_phone_number(
+def _format_phone_number(
     number: str, country: str, format: phonenumbers.PhoneNumberFormat
 ) -> str:
     # Numbers with digits are not well formatted by the phonenumbers lib.
@@ -91,7 +90,7 @@ def format_phone_number(
 
 def to_str(value: Primitive) -> str:
     if kind(value) == PHONE:
-        return format_phone_number(
+        return _format_phone_number(
             text(value), "US", phonenumbers.PhoneNumberFormat.NATIONAL
         )
     return text(value)
