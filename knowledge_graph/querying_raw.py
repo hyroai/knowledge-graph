@@ -58,7 +58,7 @@ def trigger_primitives_by_kind(
     kind: primitives.Kind,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[primitives.Primitive]]:
     return gamla.compose_left(
-        get_all_trigger_primitives,
+        _get_all_trigger_primitives,
         gamla.filter(primitives.kind_equals(kind)),
         gamla.unique,
     )
@@ -79,12 +79,7 @@ triplets_with_relations: Callable[
 )
 
 
-all_display_and_trigger_triplets = triplets_with_relations(
-    (common_relations.TRIGGER, common_relations.DISPLAY)
-)
-
-
-get_all_trigger_primitives: Callable[
+_get_all_trigger_primitives: Callable[
     [triplets_index.TripletsWithIndex], Iterable[triplet.Element]
 ] = gamla.compose_left(
     triplets_with_relation(common_relations.TRIGGER), gamla.map(triplet.object)
@@ -110,7 +105,7 @@ get_all_trigger_textuals = gamla.compose_left(
 triggers_and_names_from_kg: Callable[
     [triplets_index.TripletsWithIndex], frozenset
 ] = gamla.compose_left(
-    get_all_trigger_primitives,
+    _get_all_trigger_primitives,
     gamla.filter(
         gamla.anyjuxt(
             primitives.kind_equals(primitives.TEXTUAL),
@@ -253,10 +248,6 @@ def find_by_trigger_ignore_capitalization_custom_kind(
 
 find_unique_by_trigger_or_display_text = (
     find_unique_by_trigger_or_display_text_custom_kind(primitives.TEXTUAL)
-)
-
-find_unique_by_trigger_ignore_capitalization = (
-    find_unique_by_trigger_ignore_capitalization_custom_kind(primitives.TEXTUAL)
 )
 
 
