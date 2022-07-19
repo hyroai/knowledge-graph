@@ -90,6 +90,7 @@ IMPLEMENTATION_MODULE = "implementation/module"
 IMPLEMENTATION_NAME = "implementation/name"
 REQUIREMENT_KEY = "requirement/key"
 REQUIREMENT_VALUE = "requirement/value"
+BOT_MEDIUM = "bot/medium"
 BOT_VERTICAL = "bot/vertical"
 DO_PARAMETERS = "do/parameters"
 
