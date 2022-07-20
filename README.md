@@ -12,7 +12,7 @@ pip install cloud-utils@https://github.com/hyroai/cloud-utils/tarball/master
 
 After merging your new branch to the main branch, You need to publish a new version to PyPI. On the repo's main view go to the "Code" tab on top and then press on releases.
 Click "Draft a new release" and create you new release with semantic version that follows the rules here: https://semver.org/.
-Publishing your new release will create a new version on PyPI using the latest commit on main. 
+Publishing your new release will create a new version on PyPI using the latest commit on main.
 
 ## When to use `querying.py` vs `querying_raw.py`
 
