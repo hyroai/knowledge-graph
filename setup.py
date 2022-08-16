@@ -30,6 +30,7 @@ setuptools.setup(
     classifiers=[],
     packages=setuptools.find_namespace_packages(),
     install_requires=[
+        "cloud-utils @ https://github.com/hyroai/cloud-utils/tarball/cfc7483faab888ca4fa20ab49eae31854c2e1601",
         "dataclasses_json==0.5.5",
         "immutables",
         "pytest",
