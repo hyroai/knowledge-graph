@@ -1,4 +1,3 @@
-import itertools
 from typing import Callable, Iterable, Tuple
 
 import gamla
