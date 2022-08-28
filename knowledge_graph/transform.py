@@ -69,8 +69,8 @@ def expand_triplets_by_object(
             gamla.ternary(
                 predicate,
                 gamla.compose_left(
-                    gamla.packstack(itertools.repeat, itertools.repeat, one_to_many),
-                    gamla.star(zip),
+                    gamla.packstack(gamla.identity, gamla.identity, one_to_many),
+                    gamla.explode(2),
                 ),
                 gamla.just(()),
             )
