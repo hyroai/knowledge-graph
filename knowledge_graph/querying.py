@@ -53,11 +53,11 @@ def get_reveresed_relations_by_object() -> Callable[[storage.Node], storage.Node
 
 _get_node_display_value = gamla.compose_left(
     get_nodes_by_relation(common_relations.DISPLAY),
-    gamla.map(gamla.attrgetter("node_id")),
+    gamla.map(storage.node_id),
 )
 get_node_primitives = gamla.compose_left(
     get_nodes_by_relation(common_relations.TRIGGER),
-    gamla.map(gamla.attrgetter("node_id")),
+    gamla.map(storage.node_id),
 )
 get_node_edges = get_nodes_by_relation(common_relations.ASSOCIATION)
 
@@ -461,17 +461,16 @@ def get_entity_attribute_with_text(
     )
 
 
-@gamla.curry
-def is_neighbor_by_id(
-    kg: triplets_index.TripletsWithIndex, text: str
-) -> Callable[[storage.Node], bool]:
-    return gamla.compose_left(get_node_edges, gamla.inside(find_exactly_bare(text, kg)))
+def is_neighbor_by_id(text: str) -> Callable[[storage.Node], bool]:
+    return gamla.compose_left(
+        get_node_edges, gamla.map(storage.node_id), gamla.inside(text)
+    )
 
 
-def is_instance_by_id(
-    kg: triplets_index.TripletsWithIndex,
-) -> Callable[[str], Callable[[storage.Node], bool]]:
-    return gamla.compose_left(find_exactly(kg), is_instance_of)
+def is_instance_by_id(text: str) -> Callable[[storage.Node], bool]:
+    return gamla.compose_left(
+        get_node_types, gamla.map(storage.node_id), gamla.inside(text)
+    )
 
 
 def is_instance_of_element(element: triplet.Element) -> Callable[[storage.Node], bool]:
@@ -545,9 +544,7 @@ def bidirectional_associations_between_types(
     )
 
 
-find_and_get_node_id = gamla.compose_left(
-    find_exactly_bare, gamla.attrgetter("node_id")
-)
+find_and_get_node_id = gamla.compose_left(find_exactly_bare, storage.node_id)
 
 
 def nodes_from_texts(kg: triplets_index.TripletsWithIndex):
