@@ -222,13 +222,14 @@ pointed_by: Callable[[storage.Nodes], storage.Nodes] = gamla.compose_left(
 )
 
 
-all_subjects = gamla.prepare_and_apply(
+get_all_subjects = gamla.compose_left(
+    triplets_index.triplets, gamla.map(triplet.subject), gamla.unique, frozenset
+)
+
+
+all_subjects_nodes = gamla.prepare_and_apply(
     gamla.compose(
-        gamla.before(
-            gamla.compose_left(
-                triplets_index.triplets, gamla.map(triplet.subject), gamla.unique
-            )
-        ),
+        gamla.before(get_all_subjects),
         gamla.map,
         storage.make_node_universal_id,
     )
