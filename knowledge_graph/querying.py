@@ -223,7 +223,7 @@ pointed_by: Callable[[storage.Nodes], storage.Nodes] = gamla.compose_left(
 
 
 get_all_subjects = gamla.compose_left(
-    triplets_index.triplets, gamla.map(triplet.subject), gamla.unique, tuple
+    triplets_index.triplets, gamla.map(triplet.subject), gamla.unique, frozenset
 )
 
 
