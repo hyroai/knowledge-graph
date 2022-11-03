@@ -41,7 +41,7 @@ def get_graph(graph_id: GraphHash) -> triplets_index.TripletsWithIndex:
     return _REGISTERED_GRAPHS[graph_id]
 
 
-@dataclasses_json.dataclass_json
+@dataclasses_json.dataclass_json(letter_case=dataclasses_json.LetterCase.SNAKE)
 @dataclasses.dataclass(frozen=True)
 class Node:
     graph_id: GraphHash
