@@ -95,7 +95,6 @@ BOT_MEDIUM = "bot/medium"
 BOT_VERTICAL = "bot/vertical"
 DO_PARAMETERS = "do/parameters"
 TEMPLATE_KEY_GOAL = "template_key/goal"
-PROPERTY_FLAGS = "property/flags"
 
 
 display_triplet = triplet.make_triplet(DISPLAY)
