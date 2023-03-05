@@ -10,7 +10,12 @@ from . import triplet, triplets_index
 
 GraphHash = str
 
-
+_FIELDS_TO_SERIALIZE = [
+    "triplets",
+    "_subject_index",
+    # "_relation_index",
+    # "_object_index",
+]
 _REGISTERED_GRAPHS: Dict[GraphHash, triplets_index.TripletsWithIndex] = {}
 
 
@@ -82,16 +87,29 @@ def run_on_kg_and_node(f):
     return inner
 
 
-_from_json = gamla.compose_left(
-    gamla.itemgetter("triplets"),
-    gamla.map(
-        triplet.transform_object(gamla.when(gamla.is_instance(dict), gamla.freeze_deep))
+def _from_triplets_and_index(kg_dict: Dict) -> triplets_index.TripletsWithIndex:
+    ...
+
+
+from_json = gamla.compose_left(
+    gamla.transform_item(
+        "triplets",
+        gamla.map(
+            triplet.transform_object(
+                gamla.when(gamla.is_instance(dict), gamla.freeze_deep)
+            )
+        ),
     ),
-    triplets_index.from_triplets,
+    _from_triplets_and_index,
 )
 
+
 to_json: Callable[[triplets_index.TripletsWithIndex], Dict] = gamla.compose_left(
-    triplets_index.triplets, sorted, gamla.wrap_dict("triplets")
+    gamla.side_effect(triplets_index.TripletsWithIndex.trigger_cached_properties),
+    gamla.apply_spec(
+        {field: gamla.attrgetter(field) for field in _FIELDS_TO_SERIALIZE}
+    ),
+    gamla.transform_item("triplets", sorted),
 )
 
 
@@ -106,7 +124,7 @@ def load_to_kg(
                     file_store.load_by_hash(
                         environment == environment_local, bucket_name
                     ),
-                    _from_json,
+                    from_json,
                 ),
                 exception_type=KeyError,
             )
@@ -121,4 +139,4 @@ def load_to_kg(
     )
 
 
-load_knowledge_graph_from_file = gamla.compose_left(json.load, _from_json)
+load_knowledge_graph_from_file = gamla.compose_left(json.load, from_json)
