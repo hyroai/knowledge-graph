@@ -276,9 +276,22 @@ trigger_exists_in_kg = gamla.compose_left(
 
 
 @gamla.curry
-def is_node_in_graph(graph: triplets_index.TripletsWithIndex, text: str):
+def is_node_in_graph(graph: triplets_index.TripletsWithIndex, text: str) -> bool:
     try:
-        find_unique_by_trigger_or_display_text(graph, text),
+        find_unique_by_trigger_or_display_text(graph, text)
+    except AssertionError:
+        return False
+    return True
+
+
+@gamla.curry
+def is_node_in_graph_ignore_capitalization(
+    graph: triplets_index.TripletsWithIndex, text: str
+) -> bool:
+    try:
+        find_unique_by_trigger_or_display_text_custom_kind_ignore_capitalization(
+            primitives.TEXTUAL, graph, text
+        )
     except AssertionError:
         return False
     return True
