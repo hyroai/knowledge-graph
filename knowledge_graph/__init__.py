@@ -34,6 +34,7 @@ from .querying_raw import (  # isort:skip
     get_texts_of_textual_triggers_for_node,
     trigger_exists_in_kg,
     is_node_in_graph,
+    is_node_in_graph_ignore_capitalization,
 )
 from .common_relations import *  # isort:skip
 
