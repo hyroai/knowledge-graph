@@ -238,9 +238,11 @@ def find_by_trigger_ignore_capitalization_custom_kind(
     kind: str, graph: triplets_index.TripletsWithIndex, text: str
 ) -> FrozenSet[triplet.Element]:
     return gamla.pipe(
-        common_relations.TRIGGER,
-        _neighbors_for_element_and_reversed_relation_ignore_capitalization(
-            kind, graph, text
+        [common_relations.TRIGGER, common_relations.DISPLAY],
+        gamla.mapcat(
+            _neighbors_for_element_and_reversed_relation_ignore_capitalization(
+                kind, graph, text
+            )
         ),
         frozenset,
     )
