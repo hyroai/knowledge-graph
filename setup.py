@@ -19,7 +19,7 @@ if "-" in knowledge_graph_version:
 setuptools.setup(
     name="knowledge-graph",
     version=knowledge_graph_version,
-    python_requires=">=3.9.5",
+    python_requires=">=3.11",
     description="A library to store data in a knowledge graph",
     long_description=_LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
