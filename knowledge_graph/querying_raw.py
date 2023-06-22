@@ -246,6 +246,18 @@ def find_by_trigger_ignore_capitalization_custom_kind(
     )
 
 
+def find_by_display_ignore_capitalization_custom_kind(
+    kind: str, graph: triplets_index.TripletsWithIndex, text: str
+) -> FrozenSet[triplet.Element]:
+    return gamla.pipe(
+        common_relations.DISPLAY,
+        _neighbors_for_element_and_reversed_relation_ignore_capitalization(
+            kind, graph, text
+        ),
+        frozenset,
+    )
+
+
 find_unique_by_trigger_or_display_text = (
     find_unique_by_trigger_or_display_text_custom_kind(primitives.TEXTUAL)
 )

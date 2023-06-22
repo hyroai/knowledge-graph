@@ -94,6 +94,23 @@ def find_exactly_bare_ignore_capitalization(
 
 
 @gamla.curry
+def find_by_display_ignore_capitalization(
+    text: str, graph: triplets_index.TripletsWithIndex
+) -> FrozenSet[Optional[storage.Node]]:
+    return gamla.pipe(
+        querying_raw.find_by_display_ignore_capitalization_custom_kind(
+            primitives.TEXTUAL, graph, text
+        ),
+        gamla.ternary(
+            gamla.nonempty,
+            gamla.map(lambda node: storage.make_node_universal_id(graph, node)),
+            gamla.just(frozenset()),
+        ),
+        frozenset,
+    )
+
+
+@gamla.curry
 def find_by_trigger_ignore_capitalization(
     text: str, graph: triplets_index.TripletsWithIndex
 ) -> FrozenSet[Optional[storage.Node]]:
