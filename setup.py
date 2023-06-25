@@ -30,7 +30,7 @@ setuptools.setup(
     classifiers=[],
     packages=setuptools.find_namespace_packages(),
     install_requires=[
-        "dataclasses_json==0.5.5",
+        "dataclasses_json==0.5.7",
         "immutables",
         "pytest",
         "phonenumbers",
