@@ -138,6 +138,16 @@ def entities_with_trigger(
     )
 
 
+def entities_with_display(
+    f: primitives.Predicate,
+) -> Callable[[knowledge_graph.KnowledgeGraph], Iterable[knowledge_graph.Element]]:
+    return gamla.compose_left(
+        knowledge_graph.triplets_with_relation(knowledge_graph.DISPLAY),
+        gamla.filter(gamla.compose_left(knowledge_graph.object, f)),
+        gamla.map(knowledge_graph.subject),
+    )
+
+
 def instances_of_type(
     type: triplet.Element,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Element]]:
