@@ -128,14 +128,21 @@ is_type_node = gamla.compose_left(
 )
 
 
-def entities_with_trigger(
+@gamla.curry
+def entities_with_relation(
+    relation: str,
     f: primitives.Predicate,
 ) -> Callable[[triplets_index.TripletsWithIndex], Iterable[triplet.Element]]:
     return gamla.compose_left(
-        triplets_with_relation(common_relations.TRIGGER),
+        triplets_with_relation(relation),
         gamla.filter(gamla.compose_left(triplet.object, f)),
         gamla.map(triplet.subject),
     )
+
+
+entities_with_trigger = entities_with_relation(common_relations.TRIGGER)
+
+entities_with_display = entities_with_relation(common_relations.DISPLAY)
 
 
 def instances_of_type(
