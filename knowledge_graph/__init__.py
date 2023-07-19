@@ -27,6 +27,7 @@ from .querying_raw import (  # isort:skip
     nodes_with_triggers,
     is_type_node,
     entities_with_trigger,
+    entities_with_display,
     instances_of_type,
     find_unique_by_trigger_or_display_text_custom_kind,
     find_unique_by_trigger_or_display_text,
