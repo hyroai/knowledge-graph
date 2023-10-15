@@ -98,6 +98,7 @@ BOT_VERTICAL = "bot/vertical"
 DO_PARAMETERS = "do/parameters"
 TEMPLATE_KEY_GOAL = "template_key/goal"
 RELATION_UTM_SUFFIX = "relation/utm_suffix"
+ROUTE_FLAG = "route/flag"
 
 
 display_triplet = triplet.make_triplet(DISPLAY)
