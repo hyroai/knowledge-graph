@@ -32,7 +32,7 @@ setuptools.setup(
     install_requires=[
         "dataclasses_json==0.5.7",
         "deprecated",
-        "immutables",
+        "immutables>=0.18",
         "pytest",
         "phonenumbers",
     ],
