@@ -31,7 +31,6 @@ setuptools.setup(
     packages=setuptools.find_namespace_packages(),
     install_requires=[
         "dataclasses_json==0.5.7",
-        "deprecated",
         "immutables>=0.18",
         "pytest",
         "phonenumbers",
