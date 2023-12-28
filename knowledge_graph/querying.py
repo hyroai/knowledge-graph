@@ -492,12 +492,14 @@ def is_neighbor_by_id(text: str) -> Callable[[storage.Node], bool]:
 
 def is_instance_by_id(text: str) -> Callable[[storage.Node], bool]:
     def is_instance_by_id(node: storage.Node) -> bool:
+        graph = _node_to_graph(node)
+        if not querying_raw.is_node_in_graph(graph, text):
+            return False
         return gamla.pipe(
             node,
             get_node_types,
-            gamla.inside(find_exactly_bare(text, _node_to_graph(node))),
+            gamla.inside(find_exactly_bare(text, graph)),
         )
-
     return is_instance_by_id
 
 
