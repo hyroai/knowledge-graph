@@ -479,6 +479,13 @@ def get_entity_attribute_with_text(
     )
 
 
+def is_title_in_node_types(title) -> Callable[[storage.Node], bool]:
+    return gamla.compose_left(
+        get_node_types,
+        gamla.anymap(gamla.compose_left(get_node_title, gamla.equals(title))),
+    )
+
+
 def is_neighbor_by_id(text: str) -> Callable[[storage.Node], bool]:
     def is_neighbor_by_id(node: storage.Node) -> bool:
         return gamla.pipe(
@@ -500,6 +507,7 @@ def is_instance_by_id(text: str) -> Callable[[storage.Node], bool]:
             get_node_types,
             gamla.inside(find_exactly_bare(text, graph)),
         )
+
     return is_instance_by_id
 
 
