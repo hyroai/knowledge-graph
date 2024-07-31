@@ -1,24 +1,12 @@
-import subprocess
-
 import setuptools
 
 with open("README.md", "r") as fh:
     _LONG_DESCRIPTION = fh.read()
 
-knowledge_graph_version = (
-    subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE)
-    .stdout.decode("utf-8")
-    .strip()
-)
-
-if "-" in knowledge_graph_version:
-    v, i, s = knowledge_graph_version.split("-")
-    knowledge_graph_version = v + "+" + i + ".git." + s
-
 
 setuptools.setup(
     name="knowledge-graph",
-    version=knowledge_graph_version,
+    version="0.0.31",
     python_requires=">=3.11",
     description="A library to store data in a knowledge graph",
     long_description=_LONG_DESCRIPTION,
