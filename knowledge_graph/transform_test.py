@@ -2,22 +2,26 @@ import timeit
 
 import gamla  # noqa
 
-from knowledge_graph import common_relations, transform, triplets_index
+from knowledge_graph import common_relations, conftest, transform, triplets_index
 
-APPLE = "apple"
-ORANGE = "orange"
-FRUIT = "fruit"
+conftest.APPLE = "conftest.APPLE"
+conftest.ORANGE = "conftest.ORANGE"
+conftest.FRUIT = "conftest.FRUIT"
 
 
 def test_merge_graphs_nodes_by_id():
-    kg1 = triplets_index.from_triplet(common_relations.type_triplet(APPLE, FRUIT))
-    kg2 = triplets_index.from_triplet(common_relations.type_triplet(ORANGE, FRUIT))
+    kg1 = triplets_index.from_triplet(
+        common_relations.type_triplet(conftest.APPLE, conftest.FRUIT)
+    )
+    kg2 = triplets_index.from_triplet(
+        common_relations.type_triplet(conftest.ORANGE, conftest.FRUIT)
+    )
     assert transform.merge_graphs_nodes_by_id(
         [kg1, kg2]
     ) == triplets_index.from_triplets(
         [
-            common_relations.type_triplet(APPLE, FRUIT),
-            common_relations.type_triplet(ORANGE, FRUIT),
+            common_relations.type_triplet(conftest.APPLE, conftest.FRUIT),
+            common_relations.type_triplet(conftest.ORANGE, conftest.FRUIT),
         ]
     )
     # Make sure merge implementation is better than just concatenating the triplets.
