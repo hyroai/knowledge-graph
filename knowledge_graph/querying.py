@@ -507,7 +507,6 @@ def is_instance_by_id(text: str) -> Callable[[storage.Node], bool]:
             get_node_types,
             gamla.inside(find_exactly_bare(text, graph)),
         )
-
     return is_instance_by_id
 
 
