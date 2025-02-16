@@ -60,7 +60,7 @@ def trigger_primitives_by_kind(
     return gamla.compose_left(
         _get_all_trigger_primitives,
         gamla.filter(primitives.kind_equals(kind)),
-        gamla.unique,
+        frozenset,
     )
 
 

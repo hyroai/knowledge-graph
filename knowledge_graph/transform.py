@@ -1,7 +1,6 @@
 from typing import Callable, Iterable, Tuple
 
 import gamla
-import immutables
 
 from . import common_relations, primitives, triplet, triplets_index
 
@@ -32,17 +31,14 @@ def merge_graphs_nodes_by_id(
     graph_triplets = tuple(map(triplets_index.triplets, graphs))
     if not graph_triplets:
         return triplets_index.from_triplets(())
-    max_graph = max(graph_triplets, key=len)
-    return gamla.pipe(
-        graph_triplets,
-        gamla.filter(gamla.not_equals(max_graph)),
-        gamla.reduce(immutables.Map.update, max_graph),
-        triplets_index.from_triplets,
-    )
+
+    return triplets_index.from_triplets(frozenset().union(*graph_triplets))
 
 
 mapcat_triplets: Callable[[triplet.OneToMany], OneToOne] = gamla.compose(
-    transform_triplets, gamla.mapcat
+    transform_triplets,
+    gamla.after(lambda sets: frozenset().union(*sets)),
+    gamla.map,
 )
 map_triplets: Callable[[triplet.OneToOne], OneToOne] = gamla.compose(
     transform_triplets, gamla.map
