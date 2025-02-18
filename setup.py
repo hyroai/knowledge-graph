@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="knowledge-graph",
-    version="0.0.31",
+    version="0.0.32",
     python_requires=">=3.11",
     description="A library to store data in a knowledge graph",
     long_description=_LONG_DESCRIPTION,
