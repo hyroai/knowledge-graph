@@ -261,7 +261,7 @@ def filter_entities_by_attribute(
     return gamla.pipe(
         entities,
         gamla.filter(
-            gamla.compose_left(get_node_edges, gamla.anymap(gamla.contains(attributes)))
+            gamla.compose_left(gamla.timeit(get_node_edges), gamla.anymap(gamla.contains(attributes)))
         ),
         frozenset,
     )

@@ -173,7 +173,6 @@ from_triplet = gamla.compose_left(gamla.wrap_frozenset, TripletsWithIndex)
 def retrieve(
     relation: triplet.Element, index: Callable[[TripletsWithIndex], _TwoLevelIndex]
 ):
-    @gamla.timeit
     def retrieve(graph: TripletsWithIndex, node: triplet.Element):
         return index(graph)(node)(relation)
 
