@@ -29,7 +29,9 @@ _node_to_graph: Callable[
 get_nodes_by_relations: Callable[
     [Iterable[triplet.Element]], Callable[[storage.Node], storage.Nodes]
 ] = gamla.compose_left(
-    gamla.mapcat(querying_raw.neighbors),
+    gamla.map(querying_raw.neighbors),
+    frozenset,
+    gamla.star(gamla.juxtcat),
     storage.run_on_kg_and_node,
 )
 
