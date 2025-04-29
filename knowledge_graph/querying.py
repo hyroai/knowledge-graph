@@ -1,6 +1,7 @@
 # Queries that use a global storage of kgs. Best avoid and use `querying_raw.py`.
 import functools
 from typing import Callable, Dict, FrozenSet, Iterable, Optional, Tuple
+import concurrent.futures
 
 import gamla
 
@@ -253,18 +254,30 @@ all_subjects_nodes = gamla.prepare_and_apply(
 )
 
 
+# @functools.cache
+# @gamla.curry
+# def filter_entities_by_attribute(
+#     entities: storage.Nodes, attributes: storage.Nodes
+# ) -> storage.Nodes:
+#     return gamla.pipe(
+#         entities,
+#         gamla.filter(
+#             gamla.compose_left(get_node_edges, gamla.anymap(gamla.contains(attributes)))
+#         ),
+#         frozenset,
+#     )
+
 @functools.cache
 @gamla.curry
-def filter_entities_by_attribute(
-    entities: storage.Nodes, attributes: storage.Nodes
-) -> storage.Nodes:
-    return gamla.pipe(
-        entities,
-        gamla.filter(
-            gamla.compose_left(get_node_edges, gamla.anymap(gamla.contains(attributes)))
-        ),
-        frozenset,
-    )
+def filter_entities_by_attribute(entities: storage.Nodes, attributes: storage.Nodes) -> storage.Nodes:
+
+    def filter_fn(entity):
+        edges = gamla.timeit(get_node_edges)(entity)
+        return any(attr in attributes for attr in edges)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        filtered_entities = filter(filter_fn, entities)
+        return frozenset(executor.map(lambda x: x, filtered_entities))
 
 
 @gamla.curry
