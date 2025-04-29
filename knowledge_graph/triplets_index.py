@@ -10,7 +10,6 @@ from . import common_relations, triplet
 # This is a workaround for trading memory to query time in very large graphs
 MAX_TRIPLETS_FOR_DEEP_INDICES = 5_000_000
 
-
 _OneLevelIndex = Callable[[triplet.Element], FrozenSet[triplet.Triplet]]
 _TwoLevelIndex = Callable[[triplet.Element], _OneLevelIndex]
 _ThreeLevelIndex = Callable[[triplet.Element], _TwoLevelIndex]
@@ -31,6 +30,7 @@ class TripletsWithIndex:
         self.object_index
         self.object_relation_index
         self.subject_relation_and_object_type_index
+        self.subject_relation_index
 
     @functools.cached_property
     def subject_index(self) -> _OneLevelIndex:
@@ -64,7 +64,7 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def subject_relation_index(self) -> _TwoLevelIndex:
-        if len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
+        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
             return gamla.pipe(
                 self,
                 triplets,
@@ -85,7 +85,7 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def object_relation_index(self) -> _TwoLevelIndex:
-        if len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
+        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
             return gamla.pipe(
                 self,
                 triplets,
@@ -106,7 +106,7 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def subject_relation_and_object_type_index(self) -> _ThreeLevelIndex:
-        if len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
+        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
             return gamla.pipe(
                 self,
                 triplets,
