@@ -261,6 +261,12 @@ def filter_entities_by_attribute(
     return entities & pointing_to(attributes)
 
 
+def get_attribute_values(
+    attribute: storage.Node, entity: storage.Node
+) -> storage.Nodes:
+    return get_node_edges(entity) & get_node_instances(attribute)
+
+
 @gamla.curry
 def node_similarity(node1_id: storage.Node, node2_id: storage.Node) -> float:
     edges_union_len = len(get_node_edges(node1_id) | get_node_edges(node2_id))
