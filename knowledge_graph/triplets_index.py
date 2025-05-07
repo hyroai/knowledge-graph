@@ -7,9 +7,6 @@ import gamla
 
 from . import common_relations, triplet
 
-# This is a workaround for trading memory to query time in very large graphs
-MAX_TRIPLETS_FOR_DEEP_INDICES = 5_000_000
-
 _OneLevelIndex = Callable[[triplet.Element], FrozenSet[triplet.Triplet]]
 _TwoLevelIndex = Callable[[triplet.Element], _OneLevelIndex]
 _ThreeLevelIndex = Callable[[triplet.Element], _TwoLevelIndex]
@@ -64,16 +61,15 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def subject_relation_index(self) -> _TwoLevelIndex:
-        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
-            return gamla.pipe(
-                self,
-                triplets,
-                gamla.timeit_with_label("building subject_relation_index")(
-                    gamla.make_index(
-                        map(gamla.groupby, [triplet.subject, triplet.relation])
-                    )
-                ),
-            )
+        return gamla.pipe(
+            self,
+            triplets,
+            gamla.timeit_with_label("building subject_relation_index")(
+                gamla.make_index(
+                    map(gamla.groupby, [triplet.subject, triplet.relation])
+                )
+            ),
+        )
 
         def subject_relation_index(subject: triplet.Element) -> _OneLevelIndex:
             def relation_for_subject(relation):
@@ -85,16 +81,15 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def object_relation_index(self) -> _TwoLevelIndex:
-        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
-            return gamla.pipe(
-                self,
-                triplets,
-                gamla.timeit_with_label("building object_relation_index")(
-                    gamla.make_index(
-                        map(gamla.groupby, [triplet.object, triplet.relation])
-                    )
-                ),
-            )
+        return gamla.pipe(
+            self,
+            triplets,
+            gamla.timeit_with_label("building object_relation_index")(
+                gamla.make_index(
+                    map(gamla.groupby, [triplet.object, triplet.relation])
+                )
+            ),
+        )
 
         def object_relation_index(object: triplet.Element) -> _OneLevelIndex:
             def relation_for_object(relation):
@@ -106,29 +101,28 @@ class TripletsWithIndex:
 
     @functools.cached_property
     def subject_relation_and_object_type_index(self) -> _ThreeLevelIndex:
-        if True or len(self.triplets) <= MAX_TRIPLETS_FOR_DEEP_INDICES:
-            return gamla.pipe(
-                self,
-                triplets,
-                gamla.timeit_with_label(
-                    "building subject_relation_and_object_type_index"
-                )(
-                    gamla.make_index(
-                        [
-                            gamla.groupby(triplet.subject),
-                            gamla.groupby(triplet.relation),
-                            gamla.groupby_many(
-                                gamla.compose_left(
-                                    triplet.object,
-                                    self.subject_relation_index,
-                                    gamla.apply(common_relations.TYPE),
-                                    gamla.map(triplet.object),
-                                )
-                            ),
-                        ]
-                    )
-                ),
-            )
+        return gamla.pipe(
+            self,
+            triplets,
+            gamla.timeit_with_label(
+                "building subject_relation_and_object_type_index"
+            )(
+                gamla.make_index(
+                    [
+                        gamla.groupby(triplet.subject),
+                        gamla.groupby(triplet.relation),
+                        gamla.groupby_many(
+                            gamla.compose_left(
+                                triplet.object,
+                                self.subject_relation_index,
+                                gamla.apply(common_relations.TYPE),
+                                gamla.map(triplet.object),
+                            )
+                        ),
+                    ]
+                )
+            ),
+        )
 
         def subject_relation_and_object_type_index(
             subject: triplet.Element,
