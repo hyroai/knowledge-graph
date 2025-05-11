@@ -22,7 +22,7 @@ class NodeTitleMissing(Exception):  # noqa
     pass
 
 
-_node_to_graph: Callable[
+node_to_graph: Callable[
     [storage.Node], triplets_index.TripletsWithIndex
 ] = gamla.compose_left(gamla.attrgetter("graph_id"), storage.get_graph)
 
@@ -419,7 +419,7 @@ def get_attribute_first_value(attribute: str, node: storage.Node) -> str:
     try:
         return gamla.head(
             find_attr_display_text(
-                node, find_exactly_bare(attribute, _node_to_graph(node))
+                node, find_exactly_bare(attribute, node_to_graph(node))
             )
         )
     except StopIteration:
@@ -451,7 +451,7 @@ def query_by_primitive(kg: triplets_index.TripletsWithIndex):
 def get_entity_attribute(
     type: storage.Node, node: storage.Node
 ) -> Iterable[storage.Node]:
-    graph = _node_to_graph(node)
+    graph = node_to_graph(node)
     return gamla.pipe(
         graph.subject_relation_and_object_type_index(node.node_id)(
             common_relations.ASSOCIATION
@@ -468,7 +468,7 @@ def get_entity_attribute_with_text(
 ) -> Iterable[storage.Node]:
     return gamla.pipe(
         node,
-        gamla.pair_with(gamla.compose_left(_node_to_graph, find_exactly_bare(type))),
+        gamla.pair_with(gamla.compose_left(node_to_graph, find_exactly_bare(type))),
         gamla.star(get_entity_attribute),
     )
 
@@ -485,7 +485,7 @@ def is_neighbor_by_id(text: str) -> Callable[[storage.Node], bool]:
         return gamla.pipe(
             node,
             get_node_edges,
-            gamla.inside(find_exactly_bare(text, _node_to_graph(node))),
+            gamla.inside(find_exactly_bare(text, node_to_graph(node))),
         )
 
     return is_neighbor_by_id
@@ -493,7 +493,7 @@ def is_neighbor_by_id(text: str) -> Callable[[storage.Node], bool]:
 
 def is_instance_by_id(text: str) -> Callable[[storage.Node], bool]:
     def is_instance_by_id(node: storage.Node) -> bool:
-        graph = _node_to_graph(node)
+        graph = node_to_graph(node)
         if not querying_raw.is_node_in_graph(graph, text):
             return False
         return gamla.pipe(
@@ -588,7 +588,7 @@ def nodes_of_type_related_to_node(
 ) -> storage.Nodes:
     return get_node_reverse_edges(kg_node) & gamla.pipe(
         kg_node,
-        _node_to_graph,
+        node_to_graph,
         find_exactly_bare(nodes_type),
         get_node_instances,
     )
