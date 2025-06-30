@@ -2,6 +2,7 @@
 import functools
 from typing import Callable, Dict, FrozenSet, Iterable, Optional, Tuple
 
+import deprecated
 import gamla
 
 from . import (
@@ -195,9 +196,11 @@ get_node_title = functools.cache(
 )
 
 
-title_or_node_id = gamla.first(
-    get_node_title, storage.node_id, exception_type=NodeTitleMissing
+@deprecated.deprecated(
+    reason="ID can be anything, which makes this function unexpected. Use `get_node_title` or 'node_id' instead."
 )
+def title_or_node_id(node: storage.Node) -> str:
+    return gamla.first(get_node_title, storage.node_id, exception_type=NodeTitleMissing)(node)
 
 
 @gamla.curry
