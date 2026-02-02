@@ -85,9 +85,7 @@ class TripletsWithIndex:
             self,
             triplets,
             gamla.timeit_with_label("building object_relation_index")(
-                gamla.make_index(
-                    map(gamla.groupby, [triplet.object, triplet.relation])
-                )
+                gamla.make_index(map(gamla.groupby, [triplet.object, triplet.relation]))
             ),
         )
 
@@ -104,9 +102,7 @@ class TripletsWithIndex:
         return gamla.pipe(
             self,
             triplets,
-            gamla.timeit_with_label(
-                "building subject_relation_and_object_type_index"
-            )(
+            gamla.timeit_with_label("building subject_relation_and_object_type_index")(
                 gamla.make_index(
                     [
                         gamla.groupby(triplet.subject),
