@@ -102,17 +102,17 @@ get_all_trigger_textuals = gamla.compose_left(
 )
 
 
-triggers_and_names_from_kg: Callable[
-    [triplets_index.TripletsWithIndex], frozenset
-] = gamla.compose_left(
-    _get_all_trigger_primitives,
-    gamla.filter(
-        gamla.anyjuxt(
-            primitives.kind_equals(primitives.TEXTUAL),
-            primitives.kind_equals(primitives.NAME),
-        )
-    ),
-    gamla.map(primitives.text),
+triggers_and_names_from_kg: Callable[[triplets_index.TripletsWithIndex], frozenset] = (
+    gamla.compose_left(
+        _get_all_trigger_primitives,
+        gamla.filter(
+            gamla.anyjuxt(
+                primitives.kind_equals(primitives.TEXTUAL),
+                primitives.kind_equals(primitives.NAME),
+            )
+        ),
+        gamla.map(primitives.text),
+    )
 )
 
 nodes_with_triggers = gamla.compose_left(

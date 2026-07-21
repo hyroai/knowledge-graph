@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "knowledge-graph"
+version = "0.0.33"
+description = "A library to store data in a knowledge graph"
+readme = "README.md"
+requires-python = ">=3.14"
+authors = [{ name = "Hyro AI", email = "contact@hyro.ai" }]
+keywords = ["tag1", "tag2"]
+dependencies = [
+    "dataclasses_json==0.5.7",
+    "immutables",
+    "phonenumbers",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["knowledge_graph*"]
+
+[tool.isort]
+float_to_top = true
+atomic = true
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+known_third_party = [
+    "cloud_utils",
+    "dataclasses_json",
+    "gamla",
+    "phonenumbers",
+    "pytest",
+    "setuptools",
+]

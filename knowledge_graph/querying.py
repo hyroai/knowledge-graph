@@ -22,9 +22,9 @@ class NodeTitleMissing(Exception):  # noqa
     pass
 
 
-node_to_graph: Callable[
-    [storage.Node], triplets_index.TripletsWithIndex
-] = gamla.compose_left(gamla.attrgetter("graph_id"), storage.get_graph)
+node_to_graph: Callable[[storage.Node], triplets_index.TripletsWithIndex] = (
+    gamla.compose_left(gamla.attrgetter("graph_id"), storage.get_graph)
+)
 
 get_nodes_by_relations: Callable[
     [Iterable[triplet.Element]], Callable[[storage.Node], storage.Nodes]
