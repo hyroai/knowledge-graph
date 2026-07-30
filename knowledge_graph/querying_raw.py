@@ -18,12 +18,13 @@ def neighbors_reversed(
     graph: triplets_index.TripletsWithIndex,
     node: triplet.Element,
 ) -> FrozenSet[triplet.Element]:
-    return gamla.pipe(
-        triplets_index.retrieve(relation, triplets_index.object_relation_index)(
-            graph, node
-        ),
-        gamla.map(triplet.subject),
-        frozenset,
+    return frozenset(
+        map(
+            triplet.subject,
+            triplets_index.retrieve(relation, triplets_index.object_relation_index)(
+                graph, node
+            ),
+        )
     )
 
 
@@ -33,12 +34,13 @@ def neighbors(
     graph: triplets_index.TripletsWithIndex,
     node: triplet.Element,
 ) -> FrozenSet[triplet.Element]:
-    return gamla.pipe(
-        triplets_index.retrieve(relation, triplets_index.subject_relation_index)(
-            graph, node
-        ),
-        gamla.map(triplet.object),
-        frozenset,
+    return frozenset(
+        map(
+            triplet.object,
+            triplets_index.retrieve(relation, triplets_index.subject_relation_index)(
+                graph, node
+            ),
+        )
     )
 
 
