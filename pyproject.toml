@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "knowledge-graph"
-version = "0.0.34"
+version = "0.0.35"
 description = "A library to store data in a knowledge graph"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -12,6 +12,7 @@ authors = [{ name = "Hyro AI", email = "contact@hyro.ai" }]
 keywords = ["tag1", "tag2"]
 dependencies = [
     "dataclasses_json==0.5.7",
+    "gamla==164",
     "immutables",
     "phonenumbers",
     "pytest",

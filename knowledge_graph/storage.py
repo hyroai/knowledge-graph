@@ -71,12 +71,11 @@ def run_on_kg_and_node_any_output(f):
 
 
 def run_on_kg_and_node(f):
+    f_any_output = run_on_kg_and_node_any_output(f)
+
     def inner(node: Node) -> Nodes:
-        return gamla.pipe(
-            node,
-            run_on_kg_and_node_any_output(f),
-            gamla.map(lambda result_node: Node(node.graph_id, result_node)),
-            frozenset,
+        return frozenset(
+            Node(node.graph_id, result_node) for result_node in f_any_output(node)
         )
 
     return inner
