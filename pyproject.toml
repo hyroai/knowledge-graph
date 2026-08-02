@@ -12,6 +12,7 @@ authors = [{ name = "Hyro AI", email = "contact@hyro.ai" }]
 keywords = ["tag1", "tag2"]
 dependencies = [
     "dataclasses_json==0.5.7",
+    "gamla==164",
     "immutables",
     "phonenumbers",
     "pytest",
