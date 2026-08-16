@@ -15,7 +15,15 @@ dependencies = [
     "gamla==164",
     "immutables",
     "phonenumbers",
+]
+
+[dependency-groups]
+test = [
     "pytest",
+    # storage.py imports cloud_utils at runtime, but PyPI rejects direct-URL
+    # dependencies, so it cannot be declared above — consumers declare their own
+    # cloud-utils pin and tests get it here.
+    "cloud-utils @ git+https://github.com/hyroai/cloud-utils.git@33725609b55bdc4fbe89e1f61cb76affbe729f22",
 ]
 
 [tool.setuptools.packages.find]
